@@ -42,13 +42,9 @@ def get_product_info_for_website(item_code, skip_quotation_creation=False):
 		# Show Price if logged in.
 		# If not logged in, check if price is hidden for guest.
 		if not is_guest or not cart_settings.hide_price_for_guest:
-			price = get_price(
-				item_code,
-				selling_price_list,
-				cart_settings.default_customer_group,
-				cart_settings.company,
-				party=party,
-			)
+			priceli = frappe.db.get_value("Item", item_code, "partner_nlc")
+			formated_price = '₹ ' + str(priceli)
+			price = {'price_list_rate': priceli, 'currency': 'INR', 'formatted_price': formated_price, 'currency_symbol': '₹', 'formatted_price_sales_uom': formated_price}
 
 	stock_status = None
 
